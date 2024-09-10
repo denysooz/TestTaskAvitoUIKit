@@ -11,7 +11,15 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        let searchVC = SearchViewController()
+        let navigationController = UINavigationController(rootViewController: searchVC)
+        navigationController.navigationBar.prefersLargeTitles = true
+        
+        // Настраиваем корневой контроллер
+        view.addSubview(navigationController.view)
+        addChild(navigationController)
+        navigationController.didMove(toParent: self)
     }
 
 

@@ -13,6 +13,10 @@
 		CDC9D8572C8F3F9000BD194A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = CDC9D8562C8F3F9000BD194A /* Base */; };
 		CDC9D8592C8F3F9200BD194A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDC9D8582C8F3F9200BD194A /* Assets.xcassets */; };
 		CDC9D85C2C8F3F9200BD194A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = CDC9D85B2C8F3F9200BD194A /* Base */; };
+		CDCD6FC12C9055860052C08B /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD6FC02C9055860052C08B /* SearchViewController.swift */; };
+		CDCD6FC32C9055970052C08B /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD6FC22C9055970052C08B /* DetailViewController.swift */; };
+		CDCD6FC52C9055A40052C08B /* UnsplashAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD6FC42C9055A40052C08B /* UnsplashAPI.swift */; };
+		CDCD6FC72C905CE40052C08B /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDCD6FC62C905CE40052C08B /* SearchViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,10 @@
 		CDC9D8582C8F3F9200BD194A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CDC9D85B2C8F3F9200BD194A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CDC9D85D2C8F3F9200BD194A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CDCD6FC02C9055860052C08B /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		CDCD6FC22C9055970052C08B /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		CDCD6FC42C9055A40052C08B /* UnsplashAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashAPI.swift; sourceTree = "<group>"; };
+		CDCD6FC62C905CE40052C08B /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +67,10 @@
 				CDC9D84F2C8F3F9000BD194A /* AppDelegate.swift */,
 				CDC9D8512C8F3F9000BD194A /* SceneDelegate.swift */,
 				CDC9D8532C8F3F9000BD194A /* ViewController.swift */,
+				CDCD6FC62C905CE40052C08B /* SearchViewModel.swift */,
+				CDCD6FC02C9055860052C08B /* SearchViewController.swift */,
+				CDCD6FC22C9055970052C08B /* DetailViewController.swift */,
+				CDCD6FC42C9055A40052C08B /* UnsplashAPI.swift */,
 				CDC9D8552C8F3F9000BD194A /* Main.storyboard */,
 				CDC9D8582C8F3F9200BD194A /* Assets.xcassets */,
 				CDC9D85A2C8F3F9200BD194A /* LaunchScreen.storyboard */,
@@ -138,8 +150,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDCD6FC12C9055860052C08B /* SearchViewController.swift in Sources */,
+				CDCD6FC72C905CE40052C08B /* SearchViewModel.swift in Sources */,
 				CDC9D8542C8F3F9000BD194A /* ViewController.swift in Sources */,
 				CDC9D8502C8F3F9000BD194A /* AppDelegate.swift in Sources */,
+				CDCD6FC32C9055970052C08B /* DetailViewController.swift in Sources */,
+				CDCD6FC52C9055A40052C08B /* UnsplashAPI.swift in Sources */,
 				CDC9D8522C8F3F9000BD194A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
