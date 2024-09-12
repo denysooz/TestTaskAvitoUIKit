@@ -11,7 +11,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let searchVC = SearchViewController()
         let navigationController = UINavigationController(rootViewController: searchVC)
         navigationController.navigationBar.prefersLargeTitles = true

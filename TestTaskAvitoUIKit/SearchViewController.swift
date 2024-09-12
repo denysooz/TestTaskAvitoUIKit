@@ -8,66 +8,127 @@
 import Foundation
 import UIKit
 
-class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class SearchViewController: UIViewController {
     
-    var photos: [UnsplashPhoto] = MOCK_DATA
-    var filteredPhotos: [UnsplashPhoto] = []
+    private var searchHistory: [String] = []
+    private var filteredPhotos: [UnsplashPhoto] = []
+    private var isSearchActive: Bool = false
     
-    let tableView = UITableView()
-    let searchBar = UISearchBar()
+    private let collectionView: UICollectionView
+    private let searchController: UISearchController
+
+    init() {
+        // Настройка UISearchController
+        self.searchController = UISearchController(searchResultsController: nil)
+        
+        // Настройка UICollectionView
+        let layout = UICollectionViewFlowLayout()
+        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        super.init(nibName: nil, bundle: nil)
+        
+        // Настройка UICollectionView
+        collectionView.backgroundColor = .white
+        collectionView.register(MovieCellView.self, forCellWithReuseIdentifier: MovieCellView.reuseIdentifier)
+        
+        // Настройка UISearchController
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.placeholder = "Search Movies"
+        searchController.searchBar.delegate = self // Установка делегата
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupSearchBar()
-        setupTableView()
+        view.backgroundColor = .white
+        title = "Movies"
         
-        filteredPhotos = photos
-    }
-    
-    func setupSearchBar() {
-        searchBar.delegate = self
-        searchBar.placeholder = "Поиск фильмов"
-        navigationItem.titleView = searchBar
-    }
-    
-    func setupTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        view.addSubview(tableView)
+        // Настройка навигации
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
         
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        // Настройка CollectionView
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        view.addSubview(collectionView)
+        
+        // Установка constraints для CollectionView
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
+        // Инициализация отфильтрованных данных
+        filteredPhotos = MOCK_DATA
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+extension SearchViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return isSearchActive ? filteredPhotos.count : MOCK_DATA.count
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredPhotos.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = filteredPhotos[indexPath.row].description
-        cell.textLabel?.numberOfLines = 0
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCellView.reuseIdentifier, for: indexPath) as! MovieCellView
+        
+        // Конфигурируем ячейку с данными
+        let photo = isSearchActive ? filteredPhotos[indexPath.item] : MOCK_DATA[indexPath.item]
+        cell.configure(with: photo)
+        
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailVC = DetailViewController(photo: filteredPhotos[indexPath.row])
-        navigationController?.pushViewController(detailVC, animated: true)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let photo = isSearchActive ? filteredPhotos[indexPath.item] : MOCK_DATA[indexPath.item]
+        let detailsVC = PhotoDetailsViewController(photo: photo) // Предполагается, что у вас есть PhotoDetailsViewController
+        navigationController?.pushViewController(detailsVC, animated: true)
     }
+}
+
+// MARK: - UISearchResultsUpdating
+extension SearchViewController: UISearchResultsUpdating {
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            filteredPhotos = photos
-        } else {
-            filteredPhotos = photos.filter { $0.description.lowercased().contains(searchText.lowercased()) }
-        }
-        tableView.reloadData()
+    func updateSearchResults(for searchController: UISearchController) {
+        // Пустая реализация, так как поиск будет выполняться по Enter
+    }
+}
+
+// MARK: - UISearchBarDelegate
+extension SearchViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        
+        // Добавление текста поиска в историю
+        searchHistory.append(searchText)
+        
+        // Фильтрация фотографий
+        isSearchActive = true
+        filteredPhotos = MOCK_DATA.filter { $0.description.localizedCaseInsensitiveContains(searchText) }
+        collectionView.reloadData()
+        
+        // Закрытие клавиатуры
+        searchBar.resignFirstResponder()
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+extension SearchViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let padding: CGFloat = 10
+        let availableWidth = collectionView.frame.width - (padding * 3)
+        let width = availableWidth / 2
+        return CGSize(width: width, height: 200)
     }
 }
